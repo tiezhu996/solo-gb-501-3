@@ -1,0 +1,11 @@
+{
+  "name": "qual-auth",
+  "version": "1.0.0",
+  "private": true,
+  "description": "人员资质与关键工序授权模块（零依赖 Node.js）",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/",
+    "verify": "node verify.js"
+  }
+}
