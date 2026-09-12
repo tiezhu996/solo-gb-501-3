@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人员资质与关键工序授权</title>
+<style>
+  :root { --blue:#2563eb; --red:#dc2626; --green:#16a34a; --amber:#d97706; --gray:#6b7280; --border:#e5e7eb; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background:#f3f4f6; color:#111827; }
+  header { background:#1e3a8a; color:#fff; padding:14px 24px; }
+  header h1 { margin:0; font-size:18px; }
+  header p { margin:4px 0 0; font-size:12px; opacity:.8; }
+  nav { display:flex; gap:4px; background:#fff; padding:0 24px; border-bottom:1px solid var(--border); }
+  nav button { border:none; background:none; padding:12px 16px; font-size:14px; cursor:pointer; border-bottom:2px solid transparent; }
+  nav button.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:600; }
+  main { max-width:1180px; margin:20px auto; padding:0 16px 60px; }
+  .card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:16px 20px; margin-bottom:16px; }
+  .card h2 { margin:0 0 12px; font-size:15px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+  th { color:var(--gray); font-weight:500; white-space:nowrap; }
+  .tag { display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; }
+  .tag.green { background:#dcfce7; color:var(--green); }
+  .tag.red { background:#fee2e2; color:var(--red); }
+  .tag.amber { background:#fef3c7; color:var(--amber); }
+  .tag.gray { background:#f3f4f6; color:var(--gray); }
+  button.btn { background:var(--blue); color:#fff; border:none; border-radius:6px; padding:6px 14px; font-size:13px; cursor:pointer; }
+  button.btn.secondary { background:#fff; color:var(--blue); border:1px solid var(--blue); }
+  button.btn.danger { background:#fff; color:var(--red); border:1px solid var(--red); }
+  button.btn:disabled { opacity:.4; cursor:not-allowed; }
+  input, select { padding:6px 8px; border:1px solid var(--border); border-radius:6px; font-size:13px; }
+  .form-row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+  .alert { border-radius:6px; padding:10px 14px; font-size:13px; margin:10px 0; }
+  .alert.error { background:#fef2f2; border:1px solid #fecaca; color:#991b1b; }
+  .alert.success { background:#f0fdf4; border:1px solid #bbf7d0; color:#166534; }
+  .alert ul { margin:6px 0 0; padding-left:18px; }
+  .muted { color:var(--gray); font-size:12px; }
+  pre { background:#f9fafb; border:1px solid var(--border); border-radius:6px; padding:10px; font-size:12px; overflow:auto; }
+  .hidden { display:none; }
+  details { margin-top:6px; }
+  summary { cursor:pointer; color:var(--blue); font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>人员资质与关键工序授权</h1>
+  <p>登记资质与培训有效期 · 开班前校验操作/复核人员 · 过期、停用、不匹配即阻止开工 · 授权快照可回看</p>
+</header>
+<nav>
+  <button data-tab="persons" class="active">人员与资质</button>
+  <button data-tab="processes">工序</button>
+  <button data-tab="batches">批次开工</button>
+  <button data-tab="audit">授权回看 / 变更历史</button>
+</nav>
+<main>
+  <!-- 人员与资质 -->
+  <section id="tab-persons">
+    <div class="card">
+      <h2>登记人员</h2>
+      <div class="form-row">
+        <input id="p-empNo" placeholder="工号，如 E1005">
+        <input id="p-name" placeholder="姓名">
+        <input id="p-team" placeholder="班组">
+        <button class="btn" onclick="addPerson()">添加人员</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>发放资质（可操作工序授权）</h2>
+      <div class="form-row">
+        <select id="q-person"></select>
+        <select id="q-process"></select>
+        <input id="q-cert" placeholder="证书名称" size="22">
+        <label class="muted">培训日期 <input id="q-trained" type="date"></label>
+        <label class="muted">有效期至 <input id="q-valid" type="date"></label>
+        <button class="btn" onclick="addQualification()">发证</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>人员资质台账</h2>
+      <div id="persons-table"></div>
+    </div>
+  </section>
+
+  <!-- 工序 -->
+  <section id="tab-processes" class="hidden">
+    <div class="card">
+      <h2>登记工序</h2>
+      <div class="form-row">
+        <input id="pc-code" placeholder="工序代码，如 SEAL">
+        <input id="pc-name" placeholder="工序名称">
+        <select id="pc-key"><option value="关键">关键工序</option><option value="一般">一般工序</option></select>
+        <label class="muted"><input id="pc-reviewer" type="checkbox" checked> 需要复核人员</label>
+        <button class="btn" onclick="addProcess()">添加工序</button>
+      </div>
+    </div>
+    <div class="card"><h2>工序清单</h2><div id="processes-table"></div></div>
+  </section>
+
+  <!-- 批次开工 -->
+  <section id="tab-batches" class="hidden">
+    <div class="card">
+      <h2>创建批次并开工</h2>
+      <div class="form-row">
+        <input id="b-no" placeholder="批号，如 LOT-2026-0912">
+        <select id="b-process"></select>
+        <select id="b-operator"></select>
+        <select id="b-reviewer"></select>
+        <button class="btn" onclick="createBatch()">创建批次</button>
+      </div>
+      <div id="batch-msg"></div>
+    </div>
+    <div class="card"><h2>批次队列</h2><div id="batches-table"></div></div>
+  </section>
+
+  <!-- 授权回看 / 变更历史 -->
+  <section id="tab-audit" class="hidden">
+    <div class="card">
+      <h2>批次授权快照（当时使用的授权）</h2>
+      <div class="form-row">
+        <select id="a-batch"></select>
+        <button class="btn secondary" onclick="loadAuthorization()">查看授权快照</button>
+      </div>
+      <div id="authorization-view"></div>
+    </div>
+    <div class="card"><h2>资质变更历史</h2><div id="history-table"></div></div>
+  </section>
+</main>
+
+<script>
+const api = async (method, url, body) => {
+  const res = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, data };
+};
+
+let state = { persons: [], processes: [], batches: [], history: [] };
+
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+const procName = (id) => (state.processes.find((p) => p.id === id) || {}).name || id;
+const personName = (id) => (state.persons.find((p) => p.id === id) || {}).name || id;
+
+function qualTag(q) {
+  const today = new Date().toISOString().slice(0, 10);
+  if (q.status !== 'active') return '<span class="tag red">已停用</span>';
+  if (q.validUntil < today) return '<span class="tag red">已过期</span>';
+  return '<span class="tag green">有效</span>';
+}
+
+async function refresh() {
+  const [persons, processes, batches, history] = await Promise.all([
+    api('GET', '/api/persons'), api('GET', '/api/processes'),
+    api('GET', '/api/batches'), api('GET', '/api/qualification-history'),
+  ]);
+  state = { persons: persons.data, processes: processes.data, batches: batches.data, history: history.data };
+  renderAll();
+}
+
+/* ---------- 渲染 ---------- */
+
+function renderAll() {
+  renderPersons(); renderProcesses(); renderBatches(); renderHistory(); fillSelects();
+}
+
+function fillSelects() {
+  const pOpts = state.persons.map((p) => `<option value="${p.id}">${esc(p.name)}（${esc(p.empNo)}${p.status !== 'active' ? '·已停用' : ''}）</option>`).join('');
+  const pcOpts = state.processes.map((p) => `<option value="${p.id}">${esc(p.name)}（${esc(p.code)}）</option>`).join('');
+  for (const id of ['q-person']) document.getElementById(id).innerHTML = pOpts;
+  for (const id of ['b-operator', 'b-reviewer']) document.getElementById(id).innerHTML = pOpts;
+  for (const id of ['q-process', 'b-process']) document.getElementById(id).innerHTML = pcOpts;
+  document.getElementById('a-batch').innerHTML = state.batches
+    .map((b) => `<option value="${b.id}">${esc(b.batchNo)}（${esc(procName(b.processId))}，${b.status}）</option>`).join('');
+}
+
+function renderPersons() {
+  const rows = state.persons.map((p) => {
+    const quals = (p.qualifications || []).map((q) => `
+      <tr>
+        <td>${esc(q.id)}</td><td>${esc(procName(q.processId))}</td><td>${esc(q.certName)}</td>
+        <td>v${q.version}</td><td>${esc(q.trainedAt)}</td><td>${esc(q.validUntil)}</td>
+        <td>${qualTag(q)}</td>
+        <td>
+          <button class="btn secondary" onclick="renewQual('${q.id}')">续期</button>
+          ${q.status === 'active'
+            ? `<button class="btn danger" onclick="suspendQual('${q.id}')">停用</button>`
+            : `<button class="btn secondary" onclick="resumeQual('${q.id}')">恢复</button>`}
+          <button class="btn secondary" onclick="showQualHistory('${q.id}')">历史</button>
+        </td>
+      </tr>`).join('');
+    return `
+      <table style="margin-bottom:14px">
+        <thead><tr><th colspan="8">
+          ${esc(p.name)}（${esc(p.empNo)} · ${esc(p.team || '-')}）
+          ${p.status === 'active' ? '<span class="tag green">在职</span>' : '<span class="tag red">已停用</span>'}
+          <button class="btn ${p.status === 'active' ? 'danger' : 'secondary'}" style="margin-left:10px"
+            onclick="togglePerson('${p.id}','${p.status}')">${p.status === 'active' ? '停用人员' : '启用人员'}</button>
+        </th></tr>
+        <tr><th>资质ID</th><th>工序</th><th>证书</th><th>版本</th><th>培训日期</th><th>有效期至</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody>${quals || '<tr><td colspan="8" class="muted">暂无资质</td></tr>'}</tbody>
+      </table>`;
+  }).join('');
+  document.getElementById('persons-table').innerHTML = rows;
+}
+
+function renderProcesses() {
+  document.getElementById('processes-table').innerHTML = `
+    <table><thead><tr><th>代码</th><th>名称</th><th>级别</th><th>需复核</th><th>状态</th></tr></thead>
+    <tbody>${state.processes.map((p) => `
+      <tr><td>${esc(p.code)}</td><td>${esc(p.name)}</td><td>${esc(p.keyLevel)}</td>
+      <td>${p.requireReviewer ? '是' : '否'}</td>
+      <td>${p.active ? '<span class="tag green">启用</span>' : '<span class="tag gray">停用</span>'}</td></tr>`).join('')}
+    </tbody></table>`;
+}
+
+function renderBatches() {
+  document.getElementById('batches-table').innerHTML = `
+    <table><thead><tr><th>批号</th><th>工序</th><th>操作人员</th><th>复核人员</th><th>状态</th><th>校验/开工</th></tr></thead>
+    <tbody>${state.batches.map((b) => `
+      <tr>
+        <td>${esc(b.batchNo)}</td><td>${esc(procName(b.processId))}</td>
+        <td>${esc(personName(b.operatorId))}</td><td>${b.reviewerId ? esc(personName(b.reviewerId)) : '-'}</td>
+        <td>${b.status === 'running' ? '<span class="tag green">运行中</span>' : '<span class="tag gray">待开工</span>'}
+            ${b.authorization ? `<div class="muted">授权于 ${esc(b.authorization.grantedAt.slice(0, 19).replace('T', ' '))}</div>` : ''}</td>
+        <td>
+          <button class="btn secondary" onclick="precheck('${b.id}')">开班前校验</button>
+          <button class="btn" ${b.status === 'running' ? 'disabled' : ''} onclick="startBatch('${b.id}')">开工</button>
+          <div id="check-${b.id}"></div>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function renderHistory() {
+  const label = { create: '发证', renew: '续期', suspend: '停用', resume: '恢复' };
+  document.getElementById('history-table').innerHTML = `
+    <table><thead><tr><th>时间</th><th>资质</th><th>人员</th><th>工序</th><th>变更</th><th>版本</th><th>原因</th><th>快照</th></tr></thead>
+    <tbody>${[...state.history].reverse().map((h) => `
+      <tr>
+        <td class="muted">${esc(h.changedAt.slice(0, 19).replace('T', ' '))}</td>
+        <td>${esc(h.qualificationId)}</td><td>${esc(personName(h.personId))}</td><td>${esc(procName(h.processId))}</td>
+        <td><span class="tag ${h.changeType === 'suspend' ? 'red' : h.changeType === 'renew' ? 'amber' : 'green'}">${label[h.changeType] || h.changeType}</span></td>
+        <td>v${h.version}</td><td>${esc(h.reason)}</td>
+        <td><details><summary>当时状态</summary><pre>${esc(JSON.stringify(h.snapshot, null, 2))}</pre></details></td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+/* ---------- 操作 ---------- */
+
+async function addPerson() {
+  const body = { empNo: v('p-empNo'), name: v('p-name'), team: v('p-team') };
+  const r = await api('POST', '/api/persons', body);
+  if (!r.ok) return alert(r.data.error);
+  refresh();
+}
+
+async function addProcess() {
+  const body = { code: v('pc-code'), name: v('pc-name'), keyLevel: v('pc-key'), requireReviewer: document.getElementById('pc-reviewer').checked };
+  const r = await api('POST', '/api/processes', body);
+  if (!r.ok) return alert(r.data.error);
+  refresh();
+}
+
+async function addQualification() {
+  const body = { personId: v('q-person'), processId: v('q-process'), certName: v('q-cert'), trainedAt: v('q-trained'), validUntil: v('q-valid'), changedBy: 'web' };
+  const r = await api('POST', '/api/qualifications', body);
+  if (!r.ok) return alert(r.data.error);
+  refresh();
+}
+
+async function renewQual(id) {
+  const validUntil = prompt('续期后的有效期至（YYYY-MM-DD）：', '2027-12-31');
+  if (!validUntil) return;
+  const r = await api('PATCH', `/api/qualifications/${id}`, { action: 'renew', validUntil, reason: '到期复训续期', changedBy: 'web' });
+  if (!r.ok) return alert(r.data.error);
+  refresh();
+}
+async function suspendQual(id) {
+  const reason = prompt('停用原因：', '暂停授权');
+  if (reason === null) return;
+  const r = await api('PATCH', `/api/qualifications/${id}`, { action: 'suspend', reason, changedBy: 'web' });
+  if (!r.ok) return alert(r.data.error);
+  refresh();
+}
+async function resumeQual(id) {
+  const r = await api('PATCH', `/api/qualifications/${id}`, { action: 'resume', reason: '恢复授权', changedBy: 'web' });
+  if (!r.ok) return alert(r.data.error);
+  refresh();
+}
+async function togglePerson(id, status) {
+  const r = await api('PATCH', `/api/persons/${id}`, { status: status === 'active' ? 'disabled' : 'active' });
+  if (!r.ok) return alert(r.data.error);
+  refresh();
+}
+async function showQualHistory(id) {
+  const r = await api('GET', `/api/qualifications/${id}/history`);
+  alert(r.data.map((h) => `v${h.version} ${h.changeType} @${h.changedAt.slice(0, 19).replace('T', ' ')}\n  原因：${h.reason}\n  有效期至：${h.snapshot.validUntil} 状态：${h.snapshot.status}`).join('\n\n'));
+}
+
+async function createBatch() {
+  const body = { batchNo: v('b-no'), processId: v('b-process'), operatorId: v('b-operator'), reviewerId: v('b-reviewer') || undefined };
+  const r = await api('POST', '/api/batches', body);
+  const el = document.getElementById('batch-msg');
+  if (!r.ok) { el.innerHTML = `<div class="alert error">${esc(r.data.error)}</div>`; return; }
+  el.innerHTML = `<div class="alert success">批次 ${esc(r.data.batchNo)} 已创建，请执行开班前校验。</div>`;
+  refresh();
+}
+
+function showCheckResult(batchId, r, started) {
+  const el = document.getElementById('check-' + batchId);
+  if (!el) return;
+  if (r.ok) {
+    el.innerHTML = `<div class="alert success">${esc(r.data.message || '校验通过')}</div>`;
+  } else {
+    const reasons = (r.data.reasons || [r.data.error]).map((x) => `<li>${esc(x)}</li>`).join('');
+    el.innerHTML = `<div class="alert error"><b>${esc(r.data.error || '校验未通过')}</b><ul>${reasons}</ul></div>`;
+  }
+  if (started) setTimeout(refresh, 1200);
+}
+
+async function precheck(id) {
+  const r = await api('POST', `/api/batches/${id}/check`);
+  const el = document.getElementById('check-' + id);
+  const items = r.data.items.map((it) =>
+    `<li>${it.role === 'operator' ? '操作人员' : it.role === 'reviewer' ? '复核人员' : '工序'} ${esc(it.personName || '')}：
+     ${it.ok ? '<span class="tag green">通过</span>' : `<span class="tag red">不通过</span> ${it.reasons.map(esc).join('；')}`}</li>`).join('');
+  el.innerHTML = `<div class="alert ${r.data.pass ? 'success' : 'error'}"><b>预检${r.data.pass ? '通过' : '未通过'}</b><ul>${items}</ul></div>`;
+}
+
+async function startBatch(id) {
+  const r = await api('POST', `/api/batches/${id}/start`);
+  showCheckResult(id, r, true);
+}
+
+async function loadAuthorization() {
+  const id = v('a-batch');
+  const r = await api('GET', `/api/batches/${id}/authorization`);
+  const el = document.getElementById('authorization-view');
+  if (!r.ok) { el.innerHTML = `<div class="alert error">${esc(r.data.error)}</div>`; return; }
+  const a = r.data;
+  const personBlock = (label, p) => p ? `
+    <tr><td>${label}</td><td>${esc(p.personName)}（${esc(p.personId)}）</td>
+    <td>${esc(p.qualificationId)} v${p.qualificationVersion}</td>
+    <td>${esc(p.certName)}</td><td>${esc(p.validUntil)}</td>
+    <td><span class="tag green">${esc(p.statusAtGrant)}</span></td></tr>` : '';
+  el.innerHTML = `
+    <div class="alert success">批次 ${esc(a.batchNo)} 于 ${esc(a.grantedAt.slice(0, 19).replace('T', ' '))} 开工，当时冻结的授权如下（此后资质变更不影响本快照）：</div>
+    <table><thead><tr><th>角色</th><th>人员</th><th>资质/版本</th><th>证书</th><th>当时有效期至</th><th>当时状态</th></tr></thead>
+    <tbody>${personBlock('操作人员', a.operator)}${personBlock('复核人员', a.reviewer)}</tbody></table>`;
+}
+
+const v = (id) => document.getElementById(id).value.trim();
+
+/* ---------- 页签 ---------- */
+document.querySelectorAll('nav button').forEach((btn) => {
+  btn.onclick = () => {
+    document.querySelectorAll('nav button').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('main section').forEach((s) => s.classList.add('hidden'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.remove('hidden');
+  };
+});
+
+refresh();
+</script>
+</body>
+</html>

@@ -1,0 +1,834 @@
+{
+  "seq": {
+    "person": 4,
+    "process": 3,
+    "qualification": 5,
+    "batch": 6,
+    "history": 8,
+    "check": 8
+  },
+  "persons": [
+    {
+      "id": "P001",
+      "empNo": "E1001",
+      "name": "张三",
+      "team": "包装一班",
+      "status": "active",
+      "createdAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "P002",
+      "empNo": "E1002",
+      "name": "李四",
+      "team": "包装一班",
+      "status": "active",
+      "createdAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "P003",
+      "empNo": "E1003",
+      "name": "王五",
+      "team": "包装二班",
+      "status": "active",
+      "createdAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "P004",
+      "empNo": "E1004",
+      "name": "赵六",
+      "team": "包装二班",
+      "status": "disabled",
+      "createdAt": "2026-09-12T04:28:47.197Z"
+    }
+  ],
+  "processes": [
+    {
+      "id": "PC001",
+      "code": "SEAL",
+      "name": "封口密封",
+      "keyLevel": "关键",
+      "requireReviewer": true,
+      "active": true,
+      "createdAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "PC002",
+      "code": "STER",
+      "name": "灭菌装载",
+      "keyLevel": "关键",
+      "requireReviewer": true,
+      "active": true,
+      "createdAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "PC003",
+      "code": "VI",
+      "name": "目检",
+      "keyLevel": "一般",
+      "requireReviewer": false,
+      "active": true,
+      "createdAt": "2026-09-12T04:28:47.197Z"
+    }
+  ],
+  "qualifications": [
+    {
+      "id": "Q001",
+      "personId": "P001",
+      "processId": "PC001",
+      "certName": "封口密封操作上岗证",
+      "trainedAt": "2026-01-10",
+      "validUntil": "2027-12-31",
+      "status": "active",
+      "version": 2,
+      "createdAt": "2026-09-12T04:28:47.197Z",
+      "updatedAt": "2026-09-12T04:29:58.855Z"
+    },
+    {
+      "id": "Q002",
+      "personId": "P002",
+      "processId": "PC001",
+      "certName": "封口密封操作上岗证",
+      "trainedAt": "2026-02-01",
+      "validUntil": "2027-01-31",
+      "status": "active",
+      "version": 1,
+      "createdAt": "2026-09-12T04:28:47.197Z",
+      "updatedAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "Q003",
+      "personId": "P003",
+      "processId": "PC001",
+      "certName": "封口密封操作上岗证",
+      "trainedAt": "2025-01-05",
+      "validUntil": "2027-06-30",
+      "status": "active",
+      "version": 2,
+      "createdAt": "2026-09-12T04:28:47.197Z",
+      "updatedAt": "2026-09-12T04:29:58.815Z"
+    },
+    {
+      "id": "Q004",
+      "personId": "P001",
+      "processId": "PC002",
+      "certName": "灭菌装载上岗证",
+      "trainedAt": "2026-03-01",
+      "validUntil": "2027-02-28",
+      "status": "suspended",
+      "version": 2,
+      "createdAt": "2026-09-12T04:28:47.197Z",
+      "updatedAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "Q005",
+      "personId": "P004",
+      "processId": "PC001",
+      "certName": "封口密封操作上岗证",
+      "trainedAt": "2026-05-01",
+      "validUntil": "2027-04-30",
+      "status": "active",
+      "version": 1,
+      "createdAt": "2026-09-12T04:28:47.197Z",
+      "updatedAt": "2026-09-12T04:28:47.197Z"
+    }
+  ],
+  "qualificationHistory": [
+    {
+      "id": "H001",
+      "qualificationId": "Q001",
+      "personId": "P001",
+      "processId": "PC001",
+      "version": 1,
+      "changeType": "create",
+      "reason": "首次发证",
+      "snapshot": {
+        "id": "Q001",
+        "personId": "P001",
+        "processId": "PC001",
+        "certName": "封口密封操作上岗证",
+        "trainedAt": "2026-01-10",
+        "validUntil": "2027-01-09",
+        "status": "active",
+        "version": 1,
+        "createdAt": "2026-09-12T04:28:47.197Z",
+        "updatedAt": "2026-09-12T04:28:47.197Z"
+      },
+      "changedBy": "system",
+      "changedAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "H002",
+      "qualificationId": "Q002",
+      "personId": "P002",
+      "processId": "PC001",
+      "version": 1,
+      "changeType": "create",
+      "reason": "首次发证",
+      "snapshot": {
+        "id": "Q002",
+        "personId": "P002",
+        "processId": "PC001",
+        "certName": "封口密封操作上岗证",
+        "trainedAt": "2026-02-01",
+        "validUntil": "2027-01-31",
+        "status": "active",
+        "version": 1,
+        "createdAt": "2026-09-12T04:28:47.197Z",
+        "updatedAt": "2026-09-12T04:28:47.197Z"
+      },
+      "changedBy": "system",
+      "changedAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "H003",
+      "qualificationId": "Q003",
+      "personId": "P003",
+      "processId": "PC001",
+      "version": 1,
+      "changeType": "create",
+      "reason": "首次发证",
+      "snapshot": {
+        "id": "Q003",
+        "personId": "P003",
+        "processId": "PC001",
+        "certName": "封口密封操作上岗证",
+        "trainedAt": "2025-01-05",
+        "validUntil": "2026-01-04",
+        "status": "active",
+        "version": 1,
+        "createdAt": "2026-09-12T04:28:47.197Z",
+        "updatedAt": "2026-09-12T04:28:47.197Z"
+      },
+      "changedBy": "system",
+      "changedAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "H004",
+      "qualificationId": "Q004",
+      "personId": "P001",
+      "processId": "PC002",
+      "version": 1,
+      "changeType": "create",
+      "reason": "首次发证",
+      "snapshot": {
+        "id": "Q004",
+        "personId": "P001",
+        "processId": "PC002",
+        "certName": "灭菌装载上岗证",
+        "trainedAt": "2026-03-01",
+        "validUntil": "2027-02-28",
+        "status": "active",
+        "version": 1,
+        "createdAt": "2026-09-12T04:28:47.197Z",
+        "updatedAt": "2026-09-12T04:28:47.197Z"
+      },
+      "changedBy": "system",
+      "changedAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "H005",
+      "qualificationId": "Q004",
+      "personId": "P001",
+      "processId": "PC002",
+      "version": 2,
+      "changeType": "suspend",
+      "reason": "设备再验证期间暂停授权",
+      "snapshot": {
+        "id": "Q004",
+        "personId": "P001",
+        "processId": "PC002",
+        "certName": "灭菌装载上岗证",
+        "trainedAt": "2026-03-01",
+        "validUntil": "2027-02-28",
+        "status": "suspended",
+        "version": 2,
+        "createdAt": "2026-09-12T04:28:47.197Z",
+        "updatedAt": "2026-09-12T04:28:47.197Z"
+      },
+      "changedBy": "system",
+      "changedAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "H006",
+      "qualificationId": "Q005",
+      "personId": "P004",
+      "processId": "PC001",
+      "version": 1,
+      "changeType": "create",
+      "reason": "首次发证",
+      "snapshot": {
+        "id": "Q005",
+        "personId": "P004",
+        "processId": "PC001",
+        "certName": "封口密封操作上岗证",
+        "trainedAt": "2026-05-01",
+        "validUntil": "2027-04-30",
+        "status": "active",
+        "version": 1,
+        "createdAt": "2026-09-12T04:28:47.197Z",
+        "updatedAt": "2026-09-12T04:28:47.197Z"
+      },
+      "changedBy": "system",
+      "changedAt": "2026-09-12T04:28:47.197Z"
+    },
+    {
+      "id": "H007",
+      "qualificationId": "Q003",
+      "personId": "P003",
+      "processId": "PC001",
+      "version": 2,
+      "changeType": "renew",
+      "reason": "完成复训，续期",
+      "snapshot": {
+        "id": "Q003",
+        "personId": "P003",
+        "processId": "PC001",
+        "certName": "封口密封操作上岗证",
+        "trainedAt": "2025-01-05",
+        "validUntil": "2027-06-30",
+        "status": "active",
+        "version": 2,
+        "createdAt": "2026-09-12T04:28:47.197Z",
+        "updatedAt": "2026-09-12T04:29:58.815Z"
+      },
+      "changedBy": "qa-admin",
+      "changedAt": "2026-09-12T04:29:58.815Z"
+    },
+    {
+      "id": "H008",
+      "qualificationId": "Q001",
+      "personId": "P001",
+      "processId": "PC001",
+      "version": 2,
+      "changeType": "renew",
+      "reason": "提前续期",
+      "snapshot": {
+        "id": "Q001",
+        "personId": "P001",
+        "processId": "PC001",
+        "certName": "封口密封操作上岗证",
+        "trainedAt": "2026-01-10",
+        "validUntil": "2027-12-31",
+        "status": "active",
+        "version": 2,
+        "createdAt": "2026-09-12T04:28:47.197Z",
+        "updatedAt": "2026-09-12T04:29:58.855Z"
+      },
+      "changedBy": "qa-admin",
+      "changedAt": "2026-09-12T04:29:58.855Z"
+    }
+  ],
+  "batches": [
+    {
+      "id": "B001",
+      "batchNo": "LOT-2026-0901",
+      "processId": "PC001",
+      "operatorId": "P001",
+      "reviewerId": "P002",
+      "status": "running",
+      "checks": [
+        {
+          "id": "C001",
+          "batchId": "B001",
+          "checkedAt": "2026-09-12T04:29:06.985Z",
+          "process": {
+            "id": "PC001",
+            "code": "SEAL",
+            "name": "封口密封"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P001",
+              "personName": "张三",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q001",
+                "personId": "P001",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-01-10",
+                "validUntil": "2027-01-09",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            },
+            {
+              "role": "reviewer",
+              "personId": "P002",
+              "personName": "李四",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q002",
+                "personId": "P002",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-02-01",
+                "validUntil": "2027-01-31",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            }
+          ],
+          "pass": true
+        },
+        {
+          "id": "C002",
+          "batchId": "B001",
+          "checkedAt": "2026-09-12T04:29:07.025Z",
+          "process": {
+            "id": "PC001",
+            "code": "SEAL",
+            "name": "封口密封"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P001",
+              "personName": "张三",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q001",
+                "personId": "P001",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-01-10",
+                "validUntil": "2027-01-09",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            },
+            {
+              "role": "reviewer",
+              "personId": "P002",
+              "personName": "李四",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q002",
+                "personId": "P002",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-02-01",
+                "validUntil": "2027-01-31",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            }
+          ],
+          "pass": true
+        }
+      ],
+      "authorization": {
+        "grantedAt": "2026-09-12T04:29:07.025Z",
+        "process": {
+          "id": "PC001",
+          "code": "SEAL",
+          "name": "封口密封"
+        },
+        "operator": {
+          "personId": "P001",
+          "personName": "张三",
+          "qualificationId": "Q001",
+          "qualificationVersion": 1,
+          "certName": "封口密封操作上岗证",
+          "trainedAt": "2026-01-10",
+          "validUntil": "2027-01-09",
+          "statusAtGrant": "active"
+        },
+        "reviewer": {
+          "personId": "P002",
+          "personName": "李四",
+          "qualificationId": "Q002",
+          "qualificationVersion": 1,
+          "certName": "封口密封操作上岗证",
+          "trainedAt": "2026-02-01",
+          "validUntil": "2027-01-31",
+          "statusAtGrant": "active"
+        }
+      },
+      "createdAt": "2026-09-12T04:29:06.913Z",
+      "startedAt": "2026-09-12T04:29:07.025Z"
+    },
+    {
+      "id": "B002",
+      "batchNo": "LOT-2026-0902",
+      "processId": "PC001",
+      "operatorId": "P003",
+      "reviewerId": "P002",
+      "status": "running",
+      "checks": [
+        {
+          "id": "C003",
+          "batchId": "B002",
+          "checkedAt": "2026-09-12T04:29:33.136Z",
+          "process": {
+            "id": "PC001",
+            "code": "SEAL",
+            "name": "封口密封"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P003",
+              "personName": "王五",
+              "ok": false,
+              "reasons": [
+                "操作人员王五的「封口密封」资质已过期（有效期至 2026-01-04，今天 2026-09-12）"
+              ],
+              "qualification": {
+                "id": "Q003",
+                "personId": "P003",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2025-01-05",
+                "validUntil": "2026-01-04",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            },
+            {
+              "role": "reviewer",
+              "personId": "P002",
+              "personName": "李四",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q002",
+                "personId": "P002",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-02-01",
+                "validUntil": "2027-01-31",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            }
+          ],
+          "pass": false
+        },
+        {
+          "id": "C008",
+          "batchId": "B002",
+          "checkedAt": "2026-09-12T04:29:58.828Z",
+          "process": {
+            "id": "PC001",
+            "code": "SEAL",
+            "name": "封口密封"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P003",
+              "personName": "王五",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q003",
+                "personId": "P003",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2025-01-05",
+                "validUntil": "2027-06-30",
+                "status": "active",
+                "version": 2,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:29:58.815Z"
+              }
+            },
+            {
+              "role": "reviewer",
+              "personId": "P002",
+              "personName": "李四",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q002",
+                "personId": "P002",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-02-01",
+                "validUntil": "2027-01-31",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            }
+          ],
+          "pass": true
+        }
+      ],
+      "authorization": {
+        "grantedAt": "2026-09-12T04:29:58.828Z",
+        "process": {
+          "id": "PC001",
+          "code": "SEAL",
+          "name": "封口密封"
+        },
+        "operator": {
+          "personId": "P003",
+          "personName": "王五",
+          "qualificationId": "Q003",
+          "qualificationVersion": 2,
+          "certName": "封口密封操作上岗证",
+          "trainedAt": "2025-01-05",
+          "validUntil": "2027-06-30",
+          "statusAtGrant": "active"
+        },
+        "reviewer": {
+          "personId": "P002",
+          "personName": "李四",
+          "qualificationId": "Q002",
+          "qualificationVersion": 1,
+          "certName": "封口密封操作上岗证",
+          "trainedAt": "2026-02-01",
+          "validUntil": "2027-01-31",
+          "statusAtGrant": "active"
+        }
+      },
+      "createdAt": "2026-09-12T04:29:33.059Z",
+      "startedAt": "2026-09-12T04:29:58.828Z"
+    },
+    {
+      "id": "B003",
+      "batchNo": "LOT-2026-0903",
+      "processId": "PC001",
+      "operatorId": "P004",
+      "reviewerId": "P002",
+      "status": "draft",
+      "checks": [
+        {
+          "id": "C004",
+          "batchId": "B003",
+          "checkedAt": "2026-09-12T04:29:33.147Z",
+          "process": {
+            "id": "PC001",
+            "code": "SEAL",
+            "name": "封口密封"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P004",
+              "personName": "赵六",
+              "ok": false,
+              "reasons": [
+                "操作人员赵六已停用（人员状态：disabled）"
+              ],
+              "qualification": {
+                "id": "Q005",
+                "personId": "P004",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-05-01",
+                "validUntil": "2027-04-30",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            },
+            {
+              "role": "reviewer",
+              "personId": "P002",
+              "personName": "李四",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q002",
+                "personId": "P002",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-02-01",
+                "validUntil": "2027-01-31",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            }
+          ],
+          "pass": false
+        }
+      ],
+      "authorization": null,
+      "createdAt": "2026-09-12T04:29:33.079Z",
+      "startedAt": null
+    },
+    {
+      "id": "B004",
+      "batchNo": "LOT-2026-0904",
+      "processId": "PC002",
+      "operatorId": "P001",
+      "reviewerId": "P002",
+      "status": "draft",
+      "checks": [
+        {
+          "id": "C005",
+          "batchId": "B004",
+          "checkedAt": "2026-09-12T04:29:33.159Z",
+          "process": {
+            "id": "PC002",
+            "code": "STER",
+            "name": "灭菌装载"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P001",
+              "personName": "张三",
+              "ok": false,
+              "reasons": [
+                "操作人员张三的「灭菌装载」资质已停用（证书：灭菌装载上岗证，版本 v2）"
+              ],
+              "qualification": {
+                "id": "Q004",
+                "personId": "P001",
+                "processId": "PC002",
+                "certName": "灭菌装载上岗证",
+                "trainedAt": "2026-03-01",
+                "validUntil": "2027-02-28",
+                "status": "suspended",
+                "version": 2,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            },
+            {
+              "role": "reviewer",
+              "personId": "P002",
+              "personName": "李四",
+              "ok": false,
+              "reasons": [
+                "复核人员李四未取得工序「灭菌装载」的操作授权（资质与工序不匹配）"
+              ],
+              "qualification": null
+            }
+          ],
+          "pass": false
+        }
+      ],
+      "authorization": null,
+      "createdAt": "2026-09-12T04:29:33.096Z",
+      "startedAt": null
+    },
+    {
+      "id": "B005",
+      "batchNo": "LOT-2026-0905",
+      "processId": "PC003",
+      "operatorId": "P002",
+      "reviewerId": null,
+      "status": "draft",
+      "checks": [
+        {
+          "id": "C006",
+          "batchId": "B005",
+          "checkedAt": "2026-09-12T04:29:33.171Z",
+          "process": {
+            "id": "PC003",
+            "code": "VI",
+            "name": "目检"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P002",
+              "personName": "李四",
+              "ok": false,
+              "reasons": [
+                "操作人员李四未取得工序「目检」的操作授权（资质与工序不匹配）"
+              ],
+              "qualification": null
+            }
+          ],
+          "pass": false
+        }
+      ],
+      "authorization": null,
+      "createdAt": "2026-09-12T04:29:33.109Z",
+      "startedAt": null
+    },
+    {
+      "id": "B006",
+      "batchNo": "LOT-2026-0906",
+      "processId": "PC001",
+      "operatorId": "P001",
+      "reviewerId": "P001",
+      "status": "draft",
+      "checks": [
+        {
+          "id": "C007",
+          "batchId": "B006",
+          "checkedAt": "2026-09-12T04:29:33.184Z",
+          "process": {
+            "id": "PC001",
+            "code": "SEAL",
+            "name": "封口密封"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P001",
+              "personName": "张三",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q001",
+                "personId": "P001",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-01-10",
+                "validUntil": "2027-01-09",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            },
+            {
+              "role": "reviewer",
+              "personId": "P001",
+              "personName": "张三",
+              "ok": false,
+              "reasons": [
+                "复核人员与操作人员不能为同一人（关键工序须双人复核）"
+              ],
+              "qualification": {
+                "id": "Q001",
+                "personId": "P001",
+                "processId": "PC001",
+                "certName": "封口密封操作上岗证",
+                "trainedAt": "2026-01-10",
+                "validUntil": "2027-01-09",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T04:28:47.197Z",
+                "updatedAt": "2026-09-12T04:28:47.197Z"
+              }
+            }
+          ],
+          "pass": false
+        }
+      ],
+      "authorization": null,
+      "createdAt": "2026-09-12T04:29:33.121Z",
+      "startedAt": null
+    }
+  ]
+}
