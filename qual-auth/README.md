@@ -63,9 +63,14 @@ curl localhost:18080/api/batches/<id>/authorization        # 回看当时冻结�
 ## 回归验证
 
 ```bash
-npm test         # node:test 回归套件（27 项断言，按场景命名，失败时逐条报告）
+npm test         # 在 qual-auth 目录内；或任意目录：npm --prefix <模块路径> test
+node <模块路径>/test/qual-auth.test.js   # 任意工作目录直接运行，路径全部自定位
 node verify.js   # 单体式冒烟脚本（28 项断言）
 ```
 
 两套验证都在系统临时目录生成**干净数据副本**，用 `QUAL_AUTH_DATA` + 独立端口拉起专属实例，测试数据现场创建；「存量脏数据」用例通过停服→注入非法记录→重启来模拟老版本写入的历史数据；运行前后对正式库 `data/db.json` 做哈希比对，断言零改动。不依赖也不污染正式数据，可重复运行且结果一致。
+
+## 数据重置
+
+正式数据如需回到初始种子状态：停止服务后备份并删除 `data/db.json`，重启即自动重新播种（3 工序 / 4 人员 / 5 条资质）。
 

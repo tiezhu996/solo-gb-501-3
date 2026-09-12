@@ -5,7 +5,7 @@
   "description": "人员资质与关键工序授权模块（零依赖 Node.js）",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test test/",
+    "test": "node test/qual-auth.test.js",
     "verify": "node verify.js"
   }
 }
