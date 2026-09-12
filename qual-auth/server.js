@@ -92,6 +92,18 @@ function seedIfEmpty() {
 const today = () => new Date().toISOString().slice(0, 10);
 const now = () => new Date().toISOString();
 
+/**
+ * 严格校验 YYYY-MM-DD 且为真实日历日期。
+ * 拒绝：非字符串、非零填充（2026-1-5）、不存在的日期（2026-02-30）、越界月份等。
+ */
+function isValidDateStr(s) {
+  if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+  const [y, m, d] = s.split('-').map(Number);
+  if (y < 1900 || y > 2200) return false;
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+}
+
 function findPerson(id) { return db.persons.find((p) => p.id === id); }
 function findProcess(id) { return db.processes.find((p) => p.id === id); }
 function findQualification(id) { return db.qualifications.find((q) => q.id === id); }
@@ -159,6 +171,11 @@ function checkPersonForProcess(person, process, roleLabel) {
   if (!qual) {
     reasons.push(`${roleLabel}${person.name}未取得工序「${process.name}」的操作授权（资质与工序不匹配）`);
   } else {
+    // 兜底：历史脏数据（非法日期）一律视为不可用，阻止开工
+    if (!isValidDateStr(qual.trainedAt) || !isValidDateStr(qual.validUntil)) {
+      reasons.push(`${roleLabel}${person.name}的「${process.name}」资质日期数据无效（培训日期：${qual.trainedAt}，有效期至：${qual.validUntil}），请更正后重新登记`);
+      return { ok: false, reasons, qualification: qual };
+    }
     if (qual.status !== 'active') {
       reasons.push(`${roleLabel}${person.name}的「${process.name}」资质已停用（证书：${qual.certName}，版本 v${qual.version}）`);
     }
@@ -339,6 +356,8 @@ route('POST', '/api/qualifications', async (req, res) => {
   if (!person) return badRequest(res, 'personId 无效');
   if (!process) return badRequest(res, 'processId 无效');
   if (!b.certName || !b.trainedAt || !b.validUntil) return badRequest(res, 'certName、trainedAt、validUntil 必填');
+  if (!isValidDateStr(b.trainedAt)) return badRequest(res, `trainedAt 不是有效日期（要求 YYYY-MM-DD 且为真实日期）：${b.trainedAt}`);
+  if (!isValidDateStr(b.validUntil)) return badRequest(res, `validUntil 不是有效日期（要求 YYYY-MM-DD 且为真实日期）：${b.validUntil}`);
   if (b.validUntil <= b.trainedAt) return badRequest(res, 'validUntil 必须晚于 trainedAt');
   const existing = activeQualificationFor(person.id, process.id);
   if (existing) return badRequest(res, `该人员在此工序已有资质 ${existing.id}（v${existing.version}），请用续期/变更接口`);
@@ -356,7 +375,11 @@ route('PATCH', '/api/qualifications/:id', async (req, res, { id }) => {
   }
   if (action === 'renew') {
     if (!b.validUntil) return badRequest(res, '续期必须提供 validUntil');
+    if (!isValidDateStr(b.validUntil)) return badRequest(res, `validUntil 不是有效日期（要求 YYYY-MM-DD 且为真实日期）：${b.validUntil}`);
+    if (b.trainedAt !== undefined && !isValidDateStr(b.trainedAt)) return badRequest(res, `trainedAt 不是有效日期（要求 YYYY-MM-DD 且为真实日期）：${b.trainedAt}`);
     if (b.validUntil <= today()) return badRequest(res, `续期后的有效期 ${b.validUntil} 必须晚于今天 ${today()}`);
+    const trainedAt = b.trainedAt || qual.trainedAt;
+    if (isValidDateStr(trainedAt) && b.validUntil <= trainedAt) return badRequest(res, 'validUntil 必须晚于 trainedAt');
     mutateQualification(qual, 'renew',
       { validUntil: b.validUntil, trainedAt: b.trainedAt || qual.trainedAt, status: 'active' },
       b.reason || '到期复训续期', b.changedBy);

@@ -146,6 +146,8 @@ const personName = (id) => (state.persons.find((p) => p.id === id) || {}).name |
 
 function qualTag(q) {
   const today = new Date().toISOString().slice(0, 10);
+  const validDate = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s || '');
+  if (!validDate(q.trainedAt) || !validDate(q.validUntil)) return '<span class="tag red">日期无效</span>';
   if (q.status !== 'active') return '<span class="tag red">已停用</span>';
   if (q.validUntil < today) return '<span class="tag red">已过期</span>';
   return '<span class="tag green">有效</span>';
