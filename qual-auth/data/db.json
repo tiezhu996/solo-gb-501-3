@@ -3,9 +3,9 @@
     "person": 10,
     "process": 3,
     "qualification": 9,
-    "batch": 12,
+    "batch": 14,
     "history": 14,
-    "check": 20
+    "check": 22
   },
   "persons": [
     {
@@ -226,6 +226,18 @@
       "version": 1,
       "createdAt": "2026-09-12T04:43:23.091Z",
       "updatedAt": "2026-09-12T04:43:23.091Z"
+    },
+    {
+      "id": "Q900",
+      "personId": "P001",
+      "processId": "PC003",
+      "certName": "目检上岗证",
+      "trainedAt": "2027-06-01",
+      "validUntil": "2027-01-01",
+      "status": "active",
+      "version": 1,
+      "createdAt": "2026-09-12T00:00:00.000Z",
+      "updatedAt": "2026-09-12T00:00:00.000Z"
     }
   ],
   "qualificationHistory": [
@@ -1740,6 +1752,115 @@
       },
       "createdAt": "2026-09-12T04:43:23.101Z",
       "startedAt": "2026-09-12T04:43:23.106Z"
+    },
+    {
+      "id": "B013",
+      "batchNo": "LOT-2026-0908",
+      "processId": "PC003",
+      "operatorId": "P001",
+      "reviewerId": null,
+      "status": "running",
+      "checks": [
+        {
+          "id": "C021",
+          "batchId": "B013",
+          "checkedAt": "2026-09-12T04:50:41.811Z",
+          "process": {
+            "id": "PC003",
+            "code": "VI",
+            "name": "目检"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P001",
+              "personName": "张三",
+              "ok": true,
+              "reasons": [],
+              "qualification": {
+                "id": "Q900",
+                "personId": "P001",
+                "processId": "PC003",
+                "certName": "目检上岗证",
+                "trainedAt": "2027-06-01",
+                "validUntil": "2027-01-01",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T00:00:00.000Z",
+                "updatedAt": "2026-09-12T00:00:00.000Z"
+              }
+            }
+          ],
+          "pass": true
+        }
+      ],
+      "authorization": {
+        "grantedAt": "2026-09-12T04:50:41.812Z",
+        "process": {
+          "id": "PC003",
+          "code": "VI",
+          "name": "目检"
+        },
+        "operator": {
+          "personId": "P001",
+          "personName": "张三",
+          "qualificationId": "Q900",
+          "qualificationVersion": 1,
+          "certName": "目检上岗证",
+          "trainedAt": "2027-06-01",
+          "validUntil": "2027-01-01",
+          "statusAtGrant": "active"
+        }
+      },
+      "createdAt": "2026-09-12T04:50:21.902Z",
+      "startedAt": "2026-09-12T04:50:41.812Z"
+    },
+    {
+      "id": "B014",
+      "batchNo": "LOT-2026-0909",
+      "processId": "PC003",
+      "operatorId": "P001",
+      "reviewerId": null,
+      "status": "draft",
+      "checks": [
+        {
+          "id": "C022",
+          "batchId": "B014",
+          "checkedAt": "2026-09-12T04:54:17.607Z",
+          "process": {
+            "id": "PC003",
+            "code": "VI",
+            "name": "目检"
+          },
+          "items": [
+            {
+              "role": "operator",
+              "personId": "P001",
+              "personName": "张三",
+              "ok": false,
+              "reasons": [
+                "操作人员张三的「目检」资质日期顺序错误（有效期至 2027-01-01 不晚于培训日期 2027-06-01），请更正后重新登记"
+              ],
+              "qualification": {
+                "id": "Q900",
+                "personId": "P001",
+                "processId": "PC003",
+                "certName": "目检上岗证",
+                "trainedAt": "2027-06-01",
+                "validUntil": "2027-01-01",
+                "status": "active",
+                "version": 1,
+                "createdAt": "2026-09-12T00:00:00.000Z",
+                "updatedAt": "2026-09-12T00:00:00.000Z"
+              }
+            }
+          ],
+          "pass": false
+        }
+      ],
+      "authorization": null,
+      "createdAt": "2026-09-12T04:54:17.514Z",
+      "startedAt": null
     }
   ]
 }

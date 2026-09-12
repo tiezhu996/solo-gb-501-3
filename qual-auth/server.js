@@ -17,8 +17,10 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = Number(process.env.PORT || 18080);
-const DATA_DIR = path.join(__dirname, 'data');
-const DATA_FILE = path.join(DATA_DIR, 'db.json');
+// 数据文件默认在模块 data/ 下；可用 QUAL_AUTH_DATA 指向其他路径（测试用干净副本，不写正式数据）
+const DATA_FILE = process.env.QUAL_AUTH_DATA
+  ? path.resolve(process.env.QUAL_AUTH_DATA)
+  : path.join(__dirname, 'data', 'db.json');
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
 /* ---------------- 持久化 ---------------- */
@@ -43,7 +45,7 @@ function loadDb() {
 }
 
 function saveDb() {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
   const tmp = DATA_FILE + '.tmp';
   fs.writeFileSync(tmp, JSON.stringify(db, null, 2));
   fs.renameSync(tmp, DATA_FILE); // 原子替换，避免写一半
@@ -171,9 +173,13 @@ function checkPersonForProcess(person, process, roleLabel) {
   if (!qual) {
     reasons.push(`${roleLabel}${person.name}未取得工序「${process.name}」的操作授权（资质与工序不匹配）`);
   } else {
-    // 兜底：历史脏数据（非法日期）一律视为不可用，阻止开工
+    // 兜底：历史脏数据一律视为不可用，阻止开工
     if (!isValidDateStr(qual.trainedAt) || !isValidDateStr(qual.validUntil)) {
       reasons.push(`${roleLabel}${person.name}的「${process.name}」资质日期数据无效（培训日期：${qual.trainedAt}，有效期至：${qual.validUntil}），请更正后重新登记`);
+      return { ok: false, reasons, qualification: qual };
+    }
+    if (qual.validUntil <= qual.trainedAt) {
+      reasons.push(`${roleLabel}${person.name}的「${process.name}」资质日期顺序错误（有效期至 ${qual.validUntil} 不晚于培训日期 ${qual.trainedAt}），请更正后重新登记`);
       return { ok: false, reasons, qualification: qual };
     }
     if (qual.status !== 'active') {
